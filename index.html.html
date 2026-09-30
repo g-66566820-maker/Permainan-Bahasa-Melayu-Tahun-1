@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pengembaraan Bunyi - Tahun 1</title>
+<style>
+*{box-sizing:border-box} body{margin:0;font-family:"Trebuchet MS",Arial,sans-serif;background:linear-gradient(135deg,#c9f4ff,#fff1b8);color:#26354a;min-height:100vh;overflow-x:hidden}
+body:before,body:after{content:"☁️";position:fixed;font-size:70px;opacity:.45;z-index:-1;animation:cloud 18s linear infinite}
+body:before{top:7%;left:-80px}body:after{top:30%;right:-80px;animation-delay:8s}
+@keyframes cloud{to{transform:translateX(calc(100vw + 160px))}}
+.wrap{width:min(960px,94%);margin:auto;padding:18px 0 40px}.screen{display:none}.screen.active{display:block;animation:pop .45s}
+@keyframes pop{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:scale(1)}}
+.card{background:#fff;border-radius:30px;padding:25px;box-shadow:0 12px 35px #0002;border:4px solid #fff}
+.center{text-align:center}.hero{font-size:80px;animation:bounce 1.6s infinite}@keyframes bounce{50%{transform:translateY(-12px)}}
+h1{font-size:clamp(30px,7vw,52px);color:#5546ad;margin:4px 0}h2{color:#ed6d51}.intro{font-size:19px;line-height:1.5}
+.name{width:min(520px,100%);padding:15px;border:3px solid #a8ddff;border-radius:18px;font-size:20px;margin:18px auto;display:block}
+.btn{border:0;border-radius:18px;padding:14px 24px;font-size:20px;font-weight:bold;cursor:pointer;box-shadow:0 5px 0 #0002;transition:.15s}.btn:hover{transform:translateY(-3px)}.btn:active{transform:translateY(2px)}
+.primary{background:#6256d9;color:#fff}.green{background:#49c887;color:white}.orange{background:#ffae45;color:white}.red{background:#ef6c67;color:white}
+.hud{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:12px}.pill{padding:9px 13px;border-radius:16px;background:#f1efff;font-weight:bold}
+.hearts{font-size:25px;letter-spacing:2px}.progress{height:15px;background:#e8edf2;border-radius:20px;overflow:hidden;margin:10px 0 22px}.progress>div{height:100%;background:#6256d9;width:0;transition:.5s}
+.character{font-size:68px;text-align:center;animation:float 2s infinite}.speech{background:#fff8d9;border:3px solid #ffd66e;border-radius:22px;padding:15px;text-align:center;font-size:20px;font-weight:bold;max-width:680px;margin:8px auto 16px}
+.q{font-size:24px;text-align:center;font-weight:bold;line-height:1.45;margin:12px 0}.soundbtn{display:block;margin:10px auto 16px;background:#ffe178;border:0;border-radius:50px;padding:12px 20px;font-size:18px;font-weight:bold;cursor:pointer}
+.options{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}.opt{border:4px solid #dce5ed;background:#f8fbff;border-radius:22px;padding:18px;font-size:26px;font-weight:bold;cursor:pointer;min-height:76px}.opt:hover{transform:scale(1.02);background:#eef6ff}.opt.correct{background:#d8f9e8;border-color:#43c487;animation:shake .35s}.opt.wrong{background:#ffe0e0;border-color:#ee6a6a;animation:shake .35s}@keyframes shake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.feedback{text-align:center;min-height:54px;margin-top:15px;padding:12px;border-radius:17px;font-size:20px;font-weight:bold}.ok{background:#e1faed;color:#127b49}.bad{background:#ffebeb;color:#aa2828}
+.next{text-align:center;margin-top:8px}.badgebox{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin:18px}.badge{font-size:42px;background:#fff5c9;border-radius:50%;width:78px;height:78px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 0 #0001}.score{font-size:68px;color:#6256d9;font-weight:bold}.resultmsg{font-size:21px;font-weight:bold}.review{text-align:left;background:#f6f8fb;border-radius:18px;padding:15px;margin-top:20px}.review p{padding:9px;border-radius:10px}.yes{background:#e4faee}.no{background:#ffeded}
+@media(max-width:600px){.card{padding:17px;border-radius:23px}.options{grid-template-columns:1fr}.q{font-size:21px}.opt{font-size:23px}.hero{font-size:65px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<section id="start" class="screen active">
+<div class="card center">
+<div class="hero">🧒🎧🌈</div>
+<h1>Pengembaraan Bunyi!</h1><h2>🎵 Vokal & Konsonan 🎵</h2>
+<p class="intro">Bantu <b>Aiman</b> mengembara mencari <b>Lencana Bunyi</b>! Dengar, ajuk dan pilih bunyi yang betul.</p>
+<input id="name" class="name" maxlength="35" placeholder="✏️ Taip nama kamu">
+<p>❤️❤️❤️ Kamu ada <b>3 nyawa</b>!</p>
+<button class="btn primary" onclick="begin()">🚀 MULA PENGEMBARAAN</button>
+<p style="font-size:14px">10 cabaran • Tahun 1 • Standard Pembelajaran 1.1.2</p>
+</div>
+</section>
+
+<section id="game" class="screen">
+<div class="card">
+<div class="hud">
+<div class="pill">👦 <span id="player"></span></div><div class="pill">⭐ <span id="score">0</span></div>
+<div class="pill">❤️ <span id="life">3</span></div><div class="pill">🏅 <span id="badgeCount">0</span></div>
+</div>
+<div class="progress"><div id="bar"></div></div>
+<div class="character" id="char">🧒🎒</div>
+<div class="speech" id="speech">Mari kita dengar bunyi!</div>
+<div class="q" id="question"></div>
+<button class="soundbtn" onclick="speak()">🔊 DENGAR & AJUK</button>
+<div class="options" id="options"></div>
+<div id="feedback" class="feedback"></div>
+<div class="next"><button id="next" class="btn green" style="display:none" onclick="next()">Teruskan ➜</button></div>
+</div>
+</section>
+
+<section id="end" class="screen">
+<div class="card center">
+<div class="hero">🏆🎉🧒</div><h1>Misi Selesai!</h1>
+<p class="intro">Syabas, <b id="endName"></b>!</p>
+<div class="score"><span id="final">0</span>/10</div>
+<div id="stars" style="font-size:38px"></div>
+<h2 id="message"></h2>
+<h3>🏅 Lencana Kamu</h3><div class="badgebox" id="badges"></div>
+<button class="btn primary" onclick="again()">🔄 Main Semula</button>
+<div class="review" id="review"></div>
+</div>
+</section>
+</div>
+
+<script>
+const qs=[
+{q:"Ajuk bunyi vokal ini: <b>A</b>. Pilih bunyi yang sama.",say:"A",o:["A","I","U","M"],a:"A"},
+{q:"Ajuk bunyi vokal ini: <b>I</b>. Pilih bunyi yang sama.",say:"I",o:["E","I","O","S"],a:"I"},
+{q:"Dengar bunyi konsonan <b>M</b>. Pilih bunyi yang sama.",say:"M",o:["N","M","A","U"],a:"M"},
+{q:"Perkataan <b>mata</b> bermula dengan bunyi apa?",say:"Mata. M.",o:["M","A","T","S"],a:"M"},
+{q:"Perkataan <b>ikan</b> bermula dengan bunyi vokal apa?",say:"Ikan. I.",o:["A","I","U","K"],a:"I"},
+{q:"Ajuk bunyi konsonan ini: <b>B</b>. Pilih bunyi yang sama.",say:"B",o:["D","P","B","A"],a:"B"},
+{q:"Perkataan <b>susu</b> bermula dengan bunyi apa?",say:"Susu. S.",o:["U","S","M","A"],a:"S"},
+{q:"Ajuk bunyi vokal ini: <b>O</b>. Pilih bunyi yang sama.",say:"O",o:["O","E","I","K"],a:"O"},
+{q:"Perkataan <b>roti</b> bermula dengan bunyi apa?",say:"Roti. R.",o:["R","O","T","I"],a:"R"},
+{q:"Dengar dan ajuk: <b>U</b>. Pilih bunyi vokal yang sama.",say:"U",o:["O","A","U","M"],a:"U"}
+];
+let i=0,score=0,life=3,name="",answered=false,history=[],badges=[];
+function show(id){document.querySelectorAll(".screen").forEach(x=>x.classList.remove("active"));document.getElementById(id).classList.add("active")}
+function begin(){name=document.getElementById("name").value.trim();if(!name){alert("Taip nama dahulu ya 😊");return}i=0;score=0;life=3;history=[];badges=[];document.getElementById("player").textContent=name;show("game");load()}
+function load(){
+answered=false;let x=qs[i];document.getElementById("bar").style.width=(i/10*100)+"%";document.getElementById("score").textContent=score;document.getElementById("life").textContent=life;document.getElementById("badgeCount").textContent=badges.length;
+document.getElementById("question").innerHTML=x.q;document.getElementById("speech").textContent=i%2?"Dengar bunyi, kemudian ajuk! 🔊":"Mari cuba! Dengar dengan teliti 👂";
+document.getElementById("feedback").textContent="";document.getElementById("feedback").className="feedback";document.getElementById("next").style.display="none";
+let box=document.getElementById("options");box.innerHTML="";x.o.forEach(v=>{let b=document.createElement("button");b.className="opt";b.textContent=v;b.onclick=()=>answer(v,b);box.appendChild(b)});
+}
+function answer(v,b){
+if(answered)return;answered=true;let x=qs[i],ok=v===x.a;document.querySelectorAll(".opt").forEach(z=>z.disabled=true);history.push({n:i+1,chosen:v,correct:x.a,ok});
+let f=document.getElementById("feedback");
+if(ok){score++;b.classList.add("correct");f.innerHTML="🎉 BETUL! Hebat, kamu pandai mendengar!";f.classList.add("ok");if(score===3||score===6||score===10){badges.push(score===10?"🏆":score===6?"🌟":"🎧");document.getElementById("badgeCount").textContent=badges.length}}
+else{life--;b.classList.add("wrong");document.querySelectorAll(".opt").forEach(z=>{if(z.textContent===x.a)z.classList.add("correct")});f.innerHTML="😊 Cuba lagi! Jawapan betul ialah <b>"+x.a+"</b>.";f.classList.add("bad");document.getElementById("char").textContent="🧒💦"}
+document.getElementById("score").textContent=score;document.getElementById("life").textContent=life;document.getElementById("next").style.display="inline-block";
+}
+function next(){i++;if(i>=qs.length||life<=0)finish();else{document.getElementById("char").textContent="🧒🎒";load()}}
+function finish(){document.getElementById("bar").style.width="100%";document.getElementById("endName").textContent=name;document.getElementById("final").textContent=score;document.getElementById("stars").textContent=score>=9?"⭐⭐⭐⭐⭐":score>=7?"⭐⭐⭐⭐":score>=5?"⭐⭐⭐":score>=3?"⭐⭐":"⭐";
+document.getElementById("message").textContent=score===10?"Luar biasa! Semua bunyi betul! 🌈":score>=7?"Syabas! Kamu semakin mahir! 👏":score>=5?"Bagus! Teruskan berlatih! 💪":"Jom cuba lagi. Kamu boleh! 😊";
+document.getElementById("badges").innerHTML=badges.length?badges.map(x=>`<div class="badge">${x}</div>`).join(""):"<p>Teruskan bermain untuk kumpul lencana! 🏅</p>";
+document.getElementById("review").innerHTML="<h3>📋 Semakan</h3>"+history.map(x=>`<p class="${x.ok?"yes":"no"}"><b>${x.n}.</b> ${x.ok?"✅ Betul":"❌ Kamu pilih "+x.chosen+" — Betul: "+x.correct}</p>`).join("");show("end")}
+function again(){document.getElementById("name").value=name;show("start")}
+function speak(){let t=qs[i].say;if("speechSynthesis"in window){speechSynthesis.cancel();let u=new SpeechSynthesisUtterance(t);u.lang="ms-MY";u.rate=.72;u.pitch=1.15;speechSynthesis.speak(u)}else alert("Pelayar ini tidak menyokong fungsi suara.")}
+// bunyi ringkas betul/salah menggunakan Web Audio API
+function tone(ok){try{let c=new AudioContext(),o=c.createOscillator(),g=c.createGain();o.frequency.value=ok?660:180;o.connect(g);g.connect(c.destination);g.gain.value=.04;o.start();o.stop(c.currentTime+.16)}catch(e){}}
+</script>
+</body>
+</html>
